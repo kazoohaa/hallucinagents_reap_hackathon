@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "agent-payment": {
+      "source": "payward/kwal-skill",
+      "sourceType": "github",
+      "skillPath": "skills/agent-payment/SKILL.md",
+      "computedHash": "5602fc4b1b08fcf1bd47623ad29ef9a82e37e9cdd7f6cba61d121294e94441eb"
+    }
+  }
+}

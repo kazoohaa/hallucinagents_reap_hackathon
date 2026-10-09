@@ -1,0 +1,22 @@
+{
+  "info": {"name": "ReapPay Sandbox", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
+  "variable": [
+    {"key": "baseUrl", "value": "http://127.0.0.1:8002"},
+    {"key": "publicReturnUrl", "value": "https://90dd-122-11-245-5.ngrok-free.app/reap/return"},
+    {"key": "email", "value": "sameerahannurain@gmail.com"},
+    {"key": "ownerId", "value": "demo-user-1"},
+    {"key": "enrollmentId", "value": ""},
+    {"key": "variantId", "value": ""},
+    {"key": "quoteId", "value": ""},
+    {"key": "checkoutId", "value": ""}
+  ],
+  "item": [
+    {"name": "Configuration status", "request": {"method": "GET", "url": "{{baseUrl}}/api/reap/status"}},
+    {"name": "Create external enrollment", "request": {"method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw", "raw":"{\n  \"owner_id\": \"{{ownerId}}\",\n  \"email\": \"{{email}}\",\n  \"return_url\": \"{{publicReturnUrl}}\"\n}"}, "url": "{{baseUrl}}/api/reap/enrollments"}, "event": [{"listen":"test","script":{"exec":["const body = pm.response.json();", "if (body.id) pm.collectionVariables.set('enrollmentId', body.id);"]}}]},
+    {"name": "Read enrollment status", "request": {"method": "GET", "url": "{{baseUrl}}/api/reap/enrollments/{{enrollmentId}}"}},
+    {"name": "Search catalog", "request": {"method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw", "raw":"{\n  \"query\": \"wireless headphones\",\n  \"budget_usd\": 150\n}"}, "url": "{{baseUrl}}/api/reap/products/search"}, "event": [{"listen":"test","script":{"exec":["const body = pm.response.json();", "const variant = body.products?.[0]?.previewVariant?.id;", "if (variant) pm.collectionVariables.set('variantId', variant);"]}}]},
+    {"name": "Create quote", "request": {"method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw", "raw":"{\n  \"variant_id\": \"{{variantId}}\",\n  \"email\": \"{{email}}\"\n}"}, "url": "{{baseUrl}}/api/reap/quotes"}, "event": [{"listen":"test","script":{"exec":["const body = pm.response.json();", "if (body.id) pm.collectionVariables.set('quoteId', body.id);"]}}]},
+    {"name": "Create sandbox checkout", "request": {"method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "body": {"mode":"raw", "raw":"{\n  \"quote_id\": \"{{quoteId}}\",\n  \"enrollment_id\": \"{{enrollmentId}}\",\n  \"return_url\": \"{{publicReturnUrl}}\",\n  \"simulate_complete\": true\n}"}, "url": "{{baseUrl}}/api/reap/checkouts"}, "event": [{"listen":"test","script":{"exec":["const body = pm.response.json();", "if (body.id) pm.collectionVariables.set('checkoutId', body.id);"]}}]},
+    {"name": "Read checkout status", "request": {"method": "GET", "url": "{{baseUrl}}/api/reap/checkouts/{{checkoutId}}"}}
+  ]
+}

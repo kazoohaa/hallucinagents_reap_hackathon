@@ -1,0 +1,8 @@
+__pycache__/
+.pytest_cache/
+agentpay.db
+env.local
+.env
+*.pyc
+node_modules/
+dist/
